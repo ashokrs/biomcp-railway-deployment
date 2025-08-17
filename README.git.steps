@@ -1,0 +1,96 @@
+cd /Users/ashok/Code/apps/mcp/biomcp/railway-deployment
+
+# Initialize git repository
+git init
+
+# Check what files are present
+ls -la
+~~~
+# Create .gitignore to exclude unnecessary files
+cat > .gitignore << EOF
+# Virtual environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+EOF
+
+~~
+# Add all files (except those in .gitignore)
+git add .
+
+# Check what will be committed
+git status
+
+# You should see files like:
+# - production_biomcp_api-V16.py
+# - requirements.txt
+# - railway.json
+# - src/ (directory)
+# - pyproject.toml
+# - etc.
+
+~~
+
+# Create initial commit
+git commit -m "Initial commit: BioMCP API deployment setup
+
+- Add production_biomcp_api-V16.py (FastAPI server)
+- Add requirements.txt with BioMCP dependencies
+- Add railway.json for Railway deployment
+- Include complete BioMCP source code for CLI functionality
+- Ready for deployment to Railway.app"
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+

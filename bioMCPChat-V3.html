@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioMCP Research Assistant - 35 Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+
+        .tools-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .config-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .tools-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tool-category {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tool-category-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tool-list {
+            padding: 0.5rem;
+        }
+
+        .tool-item {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            border: 1px solid transparent;
+        }
+
+        .tool-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(2px);
+        }
+
+        .tool-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .examples {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .examples h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .example-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .example-tab {
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .example-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .example-queries {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .example-query {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .example-query:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .messages {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 50vh;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.assistant {
+            text-align: left;
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 85%;
+            padding: 1rem 1.5rem;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+
+        .user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .assistant .message-content {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .tool-result {
+            background: #e8f4fd;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tool-name {
+            font-weight: bold;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-selector {
+            padding: 0.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 50px;
+            max-height: 150px;
+            font-family: inherit;
+        }
+
+        #userInput:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #sendBtn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #sendBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        #sendBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .loading-dots {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .success {
+            background: #efe;
+            border: 1px solid #cfc;
+            color: #393;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                padding: 0.5rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .message-content {
+                max-width: 95%;
+            }
+            
+            .input-wrapper {
+                flex-direction: column;
+            }
+            
+            #sendBtn {
+                width: 100%;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .example-queries {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Enhanced styling for BioMCP results - add this to your existing CSS */
+
+        .results-summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .result-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .result-header strong {
+            color: #2c3e50;
+            line-height: 1.4;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .nct-id, .gene-name {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .gene-name {
+            background: #28a745;
+        }
+
+        .result-details {
+            color: #495057;
+            line-height: 1.5;
+        }
+
+        /* Trial-specific styling */
+        .trial-item .trial-status {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-recruiting, .status-open {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-enrollingbyinvitation {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed, .status-closed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .phase-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .trial-info {
+            margin-bottom: 0.75rem;
+        }
+
+        .trial-info > div {
+            margin-bottom: 0.25rem;
+        }
+
+        .trial-summary {
+            background: #f1f3f4;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.75rem 0;
+            font-style: italic;
+            border-left: 4px solid #667eea;
+        }
+
+        .trial-link {
+            margin-top: 0.75rem;
+        }
+
+        .trial-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .trial-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Article-specific styling */
+        .cbioportal-summary {
+            background: #e8f4fd;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .journal {
+            background: #6f42c1;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .date {
+            background: #17a2b8;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .pmid {
+            background: #6c757d;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .authors {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .abstract {
+            background: #f1f3f4;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.75rem 0;
+            border-left: 4px solid #6f42c1;
+            font-style: italic;
+        }
+
+        .article-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .article-links a {
+            color: #6f42c1;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .article-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Variant-specific styling */
+        .variant-item .significance {
+            margin-bottom: 0.75rem;
+        }
+
+        .significance-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .significance-pathogenic {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .significance-likelypathogenic {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .significance-uncertainsignificance {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .significance-likelybenign {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .significance-benign {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .variant-description {
+            background: #f1f3f4;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.75rem 0;
+            border-left: 4px solid #28a745;
+            font-style: italic;
+        }
+
+        /* Generic result styling */
+        .more-results {
+            text-align: center;
+            padding: 1rem;
+            color: #6c757d;
+            font-style: italic;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .generic-results {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .gene-results, .disease-results, .drug-results {
+            background: #f1f3f4;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Responsive design for results */
+        @media (max-width: 768px) {
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nct-id, .gene-name {
+                margin-top: 0.5rem;
+            }
+            
+            .article-meta, .trial-status, .article-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .article-meta > *, .trial-status > * {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 BioMCP Research Assistant</h1>
+        <p>Powered by Claude with 35 specialized biomedical research tools</p>
+        <div class="tools-indicator" id="toolsStatus">
+            🔧 35 Tools Available | 🔌 Ready to Connect
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <!-- Configuration Section -->
+        <div class="config-section">
+            <h3>🔑 Configuration</h3>
+            <div class="config-grid">
+                <input type="password" id="anthropicKey" class="config-input" placeholder="Enter your Anthropic API key" />
+                <input type="text" id="biomcpUrl" class="config-input" placeholder="BioMCP Service URL" value="http://localhost:8000" />
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div class="tools-section">
+            <h3>🛠️ Available BioMCP Tools (35 Total)</h3>
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Tools will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Example Queries -->
+        <div class="examples">
+            <h3>💡 Try these specialized biomedical queries:</h3>
+            <div class="example-tabs">
+                <div class="example-tab active" onclick="showExamples('breast-cancer')">Breast Cancer</div>
+                <div class="example-tab" onclick="showExamples('general')">General Research</div>
+                <div class="example-tab" onclick="showExamples('trials')">Clinical Trials</div>
+                <div class="example-tab" onclick="showExamples('variants')">Genetic Variants</div>
+                <div class="example-tab" onclick="showExamples('advanced')">Advanced Queries</div>
+            </div>
+            <div class="example-queries" id="exampleQueries">
+                <!-- Examples will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages" id="messages">
+            <div class="message assistant">
+                <div class="message-content">
+                    Welcome! I'm your BioMCP Research Assistant with access to <strong>35 specialized biomedical tools</strong>. I can search PubMed, ClinicalTrials.gov, genetic variant databases, and much more.
+                    <br><br>
+                    <strong>🚀 To get started:</strong><br>
+                    1. Enter your Anthropic API key above<br>
+                    2. Verify the BioMCP service URL (default: http://localhost:8000)<br>
+                    3. Choose from the example queries or ask any biomedical research question!
+                    <br><br>
+                    <strong>📬 Available Tool Categories:</strong><br>
+                    • Core Tools (2) - Universal search & thinking<br>
+                    • Article Tools (7) - PubMed & literature search<br>
+                    • Trial Tools (8) - Clinical trials & protocols<br>
+                    • Variant Tools (8) - Genetic variants & annotations<br>
+                    • Gene Tools (4) - Gene information & pathways<br>
+                    • Disease Tools (3) - Disease data & associations<br>
+                    • Drug Tools (3) - Drug information & trials<br>
+                    • Organization Tools (2) - Research organizations
+                </div>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-container">
+            <div class="input-controls">
+                <select class="mode-selector" id="queryMode">
+                    <option value="claude">🤖 Claude + BioMCP (Recommended)</option>
+                    <option value="direct">🔬 Direct Tool Access</option>
+                    <option value="batch">📊 Batch Processing</option>
+                </select>
+                <select class="mode-selector" id="selectedTool" style="display: none;">
+                    <option value="">Select Tool...</option>
+                </select>
+            </div>
+            <div class="input-wrapper">
+                <textarea id="userInput" placeholder="Ask me anything about biomedical research... (e.g., 'Find BRCA1 mutations associated with breast cancer treatment resistance')" onkeypress="handleKeyPress(event)"></textarea>
+                <button id="sendBtn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conversationHistory = [];
+        let availableTools = {};
+        let selectedToolName = null;
+        
+        // Complete list of 35 BioMCP tools organized by category
+        const BIOMCP_TOOLS = {
+            "Core Tools": [
+                { name: "search", description: "Universal search across articles, trials, and variants" },
+                { name: "think", description: "Sequential thinking for complex biomedical analysis" }
+            ],
+            "Article Tools": [
+                { name: "article_searcher", description: "Search PubMed, PubTator3, and preprint servers" },
+                { name: "article_getter", description: "Get detailed article information" },
+                { name: "article_details", description: "Get comprehensive article details with metadata" },
+                { name: "article_abstracts", description: "Get article abstracts and summaries" },
+                { name: "article_fulltext", description: "Get full text when available" },
+                { name: "article_citations", description: "Get article citation information" },
+                { name: "article_related", description: "Find related articles" }
+            ],
+            "Trial Tools": [
+                { name: "trial_searcher", description: "Search ClinicalTrials.gov and NCI databases" },
+                { name: "trial_getter", description: "Get comprehensive trial details" },
+                { name: "trial_protocol_getter", description: "Get trial protocol information" },
+                { name: "trial_locations_getter", description: "Get trial site locations and contacts" },
+                { name: "trial_eligibility_getter", description: "Get trial eligibility criteria" },
+                { name: "trial_outcomes_getter", description: "Get trial outcome measures and results" },
+                { name: "trial_references_getter", description: "Get trial publications and references" },
+                { name: "trial_arms_getter", description: "Get trial arm and intervention details" }
+            ],
+            "Variant Tools": [
+                { name: "variant_searcher", description: "Search genetic variant databases" },
+                { name: "variant_getter", description: "Get comprehensive variant annotations" },
+                { name: "variant_details", description: "Get detailed variant information from multiple sources" },
+                { name: "variant_clinical", description: "Get clinical significance and interpretations" },
+                { name: "variant_population", description: "Get population frequency data" },
+                { name: "variant_functional", description: "Get functional predictions and annotations" },
+                { name: "variant_literature", description: "Get variant-related literature" },
+                { name: "variant_drugs", description: "Get variant-drug associations" }
+            ],
+            "Gene Tools": [
+                { name: "gene_getter", description: "Get comprehensive gene information" },
+                { name: "gene_variants", description: "Get variants associated with a gene" },
+                { name: "gene_drugs", description: "Get gene-drug associations" },
+                { name: "gene_pathways", description: "Get gene pathway information" }
+            ],
+            "Disease Tools": [
+                { name: "disease_getter", description: "Get disease information and synonyms" },
+                { name: "disease_genes", description: "Get genes associated with a disease" },
+                { name: "disease_drugs", description: "Get drugs associated with a disease" }
+            ],
+            "Drug Tools": [
+                { name: "drug_getter", description: "Get comprehensive drug information" },
+                { name: "drug_targets", description: "Get drug target information" },
+                { name: "drug_trials", description: "Get clinical trials for a drug" }
+            ],
+            "Organization Tools": [
+                { name: "organization_searcher", description: "Search research organizations" },
+                { name: "organization_getter", description: "Get organization details" }
+            ]
+        };
+
+        // Example queries organized by category
+        const EXAMPLE_QUERIES = {
+            'breast-cancer': [
+                "Find recent BRCA1 breast cancer clinical trials with CDK4/6 inhibitors",
+                "Search for HER2-low breast cancer treatment resistance mechanisms",
+                "What are the latest immunotherapy combinations for triple negative breast cancer?",
+                "Analyze PALB2 pathogenic variants in hereditary breast cancer",
+                "Find Phase 3 trials for breast cancer with brain metastases",
+                "Research antibody-drug conjugates in HER2+ breast cancer progression"
+            ],
+            'general': [
+                "Find pathogenic TP53 mutations in cancer research",
+                "Search for CRISPR gene therapy clinical trials",
+                "What are the emerging CAR-T cell therapies?",
+                "Find articles about liquid biopsies in oncology",
+                "Research precision medicine biomarkers",
+                "Analyze tumor microenvironment in immunotherapy"
+            ],
+            'trials': [
+                "Find recruiting Phase 2 trials for pancreatic cancer",
+                "Search for biomarker-driven oncology trials",
+                "What trials are testing combination immunotherapy?",
+                "Find pediatric oncology trials with genetic screening",
+                "Search for trials using circulating tumor DNA monitoring",
+                "Find trials for rare cancer types with targeted therapy"
+            ],
+            'variants': [
+                "Analyze EGFR T790M resistance mutation clinical significance",
+                "Find population frequencies for BRCA2 c.5946delT",
+                "What are the functional predictions for TP53 R273H?",
+                "Search for drug associations with PIK3CA H1047R",
+                "Find literature about KRAS G12C targeted therapies",
+                "Analyze clinical trials testing NTRK fusion inhibitors"
+            ],
+            'advanced': [
+                "Compare efficacy of CDK4/6 inhibitors vs chemotherapy in HR+ breast cancer using meta-analysis data",
+                "Find correlations between tumor mutational burden and immunotherapy response across cancer types",
+                "Analyze biomarker-driven patient stratification in precision oncology trials",
+                "Research emerging resistance mechanisms to targeted therapies in lung cancer",
+                "Find real-world evidence for combination therapy approaches in metastatic settings",
+                "Analyze pharmacogenomic associations affecting drug metabolism in cancer treatment"
+            ]
+        };
+
+        // Initialize the interface
+        function initializeInterface() {
+            populateToolsGrid();
+            populateToolSelector();
+            showExamples('breast-cancer');
+            updateToolsStatus();
+            checkBioMCPConnection();
+        }
+
+        function populateToolsGrid() {
+            const toolsGrid = document.getElementById('toolsGrid');
+            toolsGrid.innerHTML = '';
+
+            Object.entries(BIOMCP_TOOLS).forEach(([category, tools]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'tool-category';
+                
+                const header = document.createElement('div');
+                header.className = 'tool-category-header';
+                header.textContent = `${category} (${tools.length})`;
+                
+                const toolList = document.createElement('div');
+                toolList.className = 'tool-list';
+                
+                tools.forEach(tool => {
+                    const toolItem = document.createElement('div');
+                    toolItem.className = 'tool-item';
+                    toolItem.textContent = `${tool.name}: ${tool.description}`;
+                    toolItem.onclick = () => selectTool(tool.name, toolItem);
+                    toolList.appendChild(toolItem);
+                    
+                    // Store tool info
+                    availableTools[tool.name] = tool;
+                });
+                
+                categoryDiv.appendChild(header);
+                categoryDiv.appendChild(toolList);
+                toolsGrid.appendChild(categoryDiv);
+            });
+        }
+
+        function populateToolSelector() {
+            const toolSelector = document.getElementById('selectedTool');
+            toolSelector.innerHTML = '<option value="">Select Tool...</option>';
+            
+            Object.entries(BIOMCP_TOOLS).forEach(([category, tools]) => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = category;
+                
+                tools.forEach(tool => {
+                    const option = document.createElement('option');
+                    option.value = tool.name;
+                    option.textContent = tool.name;
+                    optgroup.appendChild(option);
+                });
+                
+                toolSelector.appendChild(optgroup);
+            });
+        }
+
+        function selectTool(toolName, element) {
+            // Remove active class from all tools
+            document.querySelectorAll('.tool-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to selected tool
+            if (element) {
+                element.classList.add('active');
+            }
+            
+            selectedToolName = toolName;
+            
+            // Update input placeholder
+            const userInput = document.getElementById('userInput');
+            userInput.placeholder = `Using ${toolName}: ${availableTools[toolName]?.description || 'Enter your query...'}`;
+            
+            // Switch to direct mode
+            document.getElementById('queryMode').value = 'direct';
+            document.getElementById('selectedTool').value = toolName;
+            document.getElementById('selectedTool').style.display = 'block';
+        }
+
+        function showExamples(category) {
+            // Update active tab
+            document.querySelectorAll('.example-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show examples for category
+            const exampleQueries = document.getElementById('exampleQueries');
+            exampleQueries.innerHTML = '';
+            
+            const queries = EXAMPLE_QUERIES[category] || [];
+            queries.forEach(query => {
+                const queryDiv = document.createElement('div');
+                queryDiv.className = 'example-query';
+                queryDiv.textContent = query;
+                queryDiv.onclick = () => setQuery(query);
+                exampleQueries.appendChild(queryDiv);
+            });
+        }
+
+        function setQuery(query) {
+            document.getElementById('userInput').value = query;
+            document.getElementById('userInput').focus();
+        }
+
+        function updateToolsStatus() {
+            const biomcpUrl = document.getElementById('biomcpUrl').value;
+            const anthropicKey = document.getElementById('anthropicKey').value;
+            const toolsStatus = document.getElementById('toolsStatus');
+            
+            if (anthropicKey && biomcpUrl) {
+                toolsStatus.textContent = '🔧 35 Tools Available | ✅ Ready to Research';
+                toolsStatus.style.background = 'rgba(0, 255, 0, 0.2)';
+            } else {
+                toolsStatus.textContent = '🔧 35 Tools Available | ⚠️ API Key Required';
+                toolsStatus.style.background = 'rgba(255, 255, 0, 0.2)';
+            }
+        }
+
+        async function checkBioMCPConnection() {
+            const biomcpUrl = document.getElementById('biomcpUrl').value;
+            try {
+                const response = await fetch(`${biomcpUrl}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('BioMCP Service Connected:', data);
+                    updateToolsStatus();
+                }
+            } catch (error) {
+                console.warn('BioMCP service not reachable:', error);
+            }
+        }
+
+        // Update query mode handling
+        document.getElementById('queryMode').addEventListener('change', function() {
+            const selectedTool = document.getElementById('selectedTool');
+            if (this.value === 'direct') {
+                selectedTool.style.display = 'block';
+            } else {
+                selectedTool.style.display = 'none';
+                selectedToolName = null;
+                document.querySelectorAll('.tool-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.getElementById('userInput').placeholder = "Ask me anything about biomedical research...";
+            }
+        });
+
+        // Monitor configuration changes
+        document.getElementById('anthropicKey').addEventListener('input', updateToolsStatus);
+        document.getElementById('biomcpUrl').addEventListener('input', updateToolsStatus);
+
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = content;
+            
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            return messageDiv;
+        }
+
+        function showLoading() {
+            const loadingHTML = `
+                <div class="loading">
+                    <span>BioMCP is analyzing your query with specialized tools</span>
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            return addMessage(loadingHTML);
+        }
+
+        function removeLoading(loadingElement) {
+            if (loadingElement && loadingElement.parentNode) {
+                loadingElement.parentNode.removeChild(loadingElement);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Update the callBioMCPTool function to include debug logging
+        async function callBioMCPTool(toolName, parameters) {
+            const biomcpUrl = document.getElementById('biomcpUrl').value;
+            
+            debugLog(`Calling tool: ${toolName}`, parameters);
+            
+            try {
+                const response = await fetch(`${biomcpUrl}/api/tools/${toolName}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(parameters)
+                });
+                
+                debugLog(`Response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Tool call failed: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                debugLog(`Tool result:`, result);
+                
+                return result;
+            } catch (error) {
+                debugLog(`Tool call error:`, error.message);
+                console.error('Tool call error:', error);
+                return {
+                    success: false,
+                    data: { error: error.message }
+                };
+            }
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const anthropicKey = document.getElementById('anthropicKey').value;
+            const biomcpUrl = document.getElementById('biomcpUrl').value;
+            const queryMode = document.getElementById('queryMode').value;
+            const message = userInput.value.trim();
+            
+            if (!message) return;
+            
+            if (!anthropicKey) {
+                alert('Please enter your Anthropic API key');
+                return;
+            }
+            
+            // Add user message
+            addMessage(message, true);
+            
+            // Clear input and disable button
+            userInput.value = '';
+            sendBtn.disabled = true;
+            
+            // Show loading
+            const loadingElement = showLoading();
+            
+            try {
+                if (queryMode === 'direct') {
+                    // Direct tool access
+                    const toolName = document.getElementById('selectedTool').value;
+                    if (!toolName) {
+                        throw new Error('Please select a tool for direct access');
+                    }
+                    
+                    await executeDirectToolCall(toolName, message, biomcpUrl);
+                } else if (queryMode === 'batch') {
+                    // Batch processing
+                    await executeBatchQueries(message, biomcpUrl);
+                } else {
+                    // Claude + BioMCP mode
+                    await executeClaudeQuery(message, anthropicKey, biomcpUrl);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoading(loadingElement);
+                addMessage(`<div class="error">Error: ${error.message}</div>`);
+            } finally {
+                removeLoading(loadingElement);
+                sendBtn.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        async function executeDirectToolCall(toolName, query, biomcpUrl) {
+            // Prepare parameters based on tool type
+            const params = prepareToolParameters(toolName, query);
+            
+            // Call the tool
+            const result = await callBioMCPTool(toolName, params);
+            
+            // Display results
+            if (result.success) {
+                const resultHTML = formatToolResult(toolName, result.data);
+                addMessage(resultHTML);
+            } else {
+                addMessage(`<div class="error">Tool execution failed: ${result.data.error || 'Unknown error'}</div>`);
+            }
+        }
+
+        async function executeBatchQueries(queries, biomcpUrl) {
+            const queryList = queries.split('\n').filter(q => q.trim());
+            
+            if (queryList.length === 0) {
+                throw new Error('Please enter queries separated by new lines for batch processing');
+            }
+            
+            const response = await fetch(`${biomcpUrl}/api/batch/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    queries: queryList,
+                    tool_name: 'search',
+                    parallel: true
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Batch processing failed: ${response.status}`);
+            }
+            
+            const results = await response.json();
+            
+            let resultHTML = `<strong>Batch Results:</strong><br>`;
+            resultHTML += `Total: ${results.total_queries} | Success: ${results.successful} | Failed: ${results.failed}<br><br>`;
+            
+            results.results.forEach((result, index) => {
+                resultHTML += `<div class="tool-result">`;
+                resultHTML += `<div class="tool-name">Query ${index + 1}: ${queryList[index]}</div>`;
+                if (result.success) {
+                    resultHTML += `<pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+                } else {
+                    resultHTML += `<div class="error">Failed: ${result.data.error}</div>`;
+                }
+                resultHTML += `</div>`;
+            });
+            
+            addMessage(resultHTML);
+        }
+
+        async function executeClaudeQuery(query, apiKey, biomcpUrl) {
+            const analysis = analyzeQuery(query);
+            let responseHTML = '<strong>🔬 BioMCP Analysis Results:</strong><br><br>';
+            let hasResults = false;
+            
+            for (const toolCall of analysis.suggestedTools) {
+                try {
+                    console.log(`Calling tool: ${toolCall.tool} with params:`, toolCall.params);
+                    
+                    const result = await callBioMCPTool(toolCall.tool, toolCall.params);
+                    
+                    if (result.success) {
+                        responseHTML += formatToolResult(toolCall.tool, result.data);
+                        hasResults = true;
+                    } else {
+                        console.error(`Tool ${toolCall.tool} failed:`, result.data);
+                        responseHTML += `<div class="error">⚠️ ${toolCall.tool} failed: ${result.data.error || 'Unknown error'}</div><br>`;
+                    }
+                } catch (error) {
+                    console.error(`Error calling tool ${toolCall.tool}:`, error);
+                    responseHTML += `<div class="error">⚠️ ${toolCall.tool} error: ${error.message}</div><br>`;
+                }
+            }
+            
+            if (!hasResults) {
+                responseHTML += `
+                    <div class="tool-result">
+                        <div class="tool-name">💡 Suggestions</div>
+                        <strong>No results found. Try:</strong><br>
+                        • Use more specific terms (e.g., "BRCA1 breast cancer trials")<br>
+                        • Check spelling of gene names and medical terms<br>
+                        • Try direct tool access with the tool selector<br>
+                        • Use broader search terms initially<br><br>
+                        
+                        <strong>Query analyzed as:</strong> ${query}<br>
+                        <strong>Suggested tools:</strong> ${analysis.suggestedTools.map(t => t.tool).join(', ')}
+                    </div>
+                `;
+            }
+            
+            addMessage(responseHTML);
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+        function analyzeQuery(query) {
+            const lowerQuery = query.toLowerCase();
+            const suggestedTools = [];
+            
+            // Enhanced pattern matching for breast cancer queries
+            if (lowerQuery.includes('brca1') || lowerQuery.includes('brca2') || lowerQuery.includes('palb2')) {
+                if (lowerQuery.includes('trial') || lowerQuery.includes('clinical')) {
+                    const gene = extractGene(query);
+                    const condition = extractCondition(query) || 'breast cancer';
+                    const intervention = extractIntervention(query);
+                    
+                    const params = { limit: 10, condition: condition };
+                    
+                    // Use gene as a term, not gene parameter
+                    if (gene) {
+                        params.term = gene;  // This will be converted to --term
+                    }
+                    if (intervention) {
+                        params.intervention = intervention;
+                    }
+                    
+                    // Add additional terms for CDK4/6
+                    if (lowerQuery.includes('cdk4/6') || lowerQuery.includes('cdk4') || lowerQuery.includes('cdk6')) {
+                        if (!params.intervention) {
+                            params.intervention = 'CDK4/6 inhibitor';
+                        }
+                    }
+                    
+                    suggestedTools.push({ 
+                        tool: 'trial_searcher', 
+                        reason: 'BRCA gene clinical trial search',
+                        params: params
+                    });
+                }
+
+                if (lowerQuery.includes('mutation') || lowerQuery.includes('variant') || lowerQuery.includes('pathogenic')) {
+                    const gene = extractGene(query);
+                    const significance = extractSignificance(query);
+                    
+                    const params = { limit: 10 };
+                    if (gene) params.gene = gene;
+                    if (significance.length > 0) params.significance = significance;
+                    
+                    suggestedTools.push({ 
+                        tool: 'variant_searcher', 
+                        reason: 'BRCA variant search',
+                        params: params
+                    });
+                }
+                
+                // Always add article search for BRCA queries
+                const gene = extractGene(query);
+                const disease = extractDisease(query) || 'breast cancer';
+                
+                suggestedTools.push({ 
+                    tool: 'article_searcher', 
+                    reason: 'BRCA literature search',
+                    params: {
+                        gene: gene,
+                        disease: disease,
+                        limit: 10
+                    }
+                });
+            }
+            
+            // Clinical trial patterns
+            else if (lowerQuery.includes('trial') || lowerQuery.includes('clinical')) {
+                const condition = extractCondition(query);
+                const phase = extractPhase(query);
+                const gene = extractGene(query);
+                const intervention = extractIntervention(query);
+                
+                const params = { limit: 10 };
+                if (condition) params.condition = condition;
+                if (phase.length > 0) params.phase = phase;
+                if (gene) params.term = gene; // Changed from params.gene to params.term
+                if (intervention) params.intervention = intervention;
+                
+                // Add search terms for complex queries
+                if (lowerQuery.includes('cdk4/6') || lowerQuery.includes('cdk4') || lowerQuery.includes('cdk6')) {
+                    params.intervention = 'CDK4/6 inhibitor';
+                }
+                
+                suggestedTools.push({ 
+                    tool: 'trial_searcher', 
+                    reason: 'Clinical trial search',
+                    params: params
+                });
+            }
+            
+            // Article/literature patterns
+            else if (lowerQuery.includes('article') || lowerQuery.includes('paper') || lowerQuery.includes('pubmed') || 
+                lowerQuery.includes('literature') || lowerQuery.includes('research') || lowerQuery.includes('study') ||
+                lowerQuery.includes('find') || lowerQuery.includes('search')) {
+                
+                const gene = extractGene(query);
+                const disease = extractDisease(query);
+                const variant = extractVariant(query);
+                
+                const params = { limit: 10 };
+                if (gene) params.gene = gene;
+                if (disease) params.disease = disease;
+                if (variant) params.variant = variant;
+                if (!gene && !disease && !variant) params.keyword = query;
+                
+                suggestedTools.push({ 
+                    tool: 'article_searcher', 
+                    reason: 'Literature search',
+                    params: params
+                });
+            }
+            
+            // Variant patterns
+            else if (lowerQuery.includes('variant') || lowerQuery.includes('mutation') || lowerQuery.includes('snp') || 
+                lowerQuery.includes('pathogenic') || lowerQuery.includes('benign')) {
+                const gene = extractGene(query);
+                const significance = extractSignificance(query);
+                const variant = extractVariant(query);
+                
+                const params = { limit: 10 };
+                if (gene) params.gene = gene;
+                if (significance.length > 0) params.significance = significance;
+                if (variant) params.variant = variant;
+                
+                suggestedTools.push({ 
+                    tool: 'variant_searcher', 
+                    reason: 'Variant search',
+                    params: params
+                });
+            }
+            
+            // If no specific tools identified, use article search as fallback
+            if (suggestedTools.length === 0) {
+                suggestedTools.push({ 
+                    tool: 'article_searcher', 
+                    reason: 'General literature search',
+                    params: { keyword: query, limit: 10 }
+                });
+            }
+            
+            return { suggestedTools };
+        }
+
+        // Enhanced helper functions
+        function extractGene(query) {
+            const genePatterns = [
+                /\b(BRCA1|BRCA2|PALB2|TP53|EGFR|KRAS|PIK3CA|NTRK|HER2|ERBB2|ATM|CHEK2|CDH1|STK11|PTEN)\b/i,
+                /\b([A-Z][A-Z0-9]{2,8})\b/
+            ];
+            
+            for (const pattern of genePatterns) {
+                const match = query.match(pattern);
+                if (match) return match[1].toUpperCase();
+            }
+            return null;
+        }
+
+        function extractVariant(query) {
+            const variantPatterns = [
+                /\b(rs\d+)\b/i,  // dbSNP IDs
+                /\b[A-Z]\d+[A-Z]\b/i,  // Simple amino acid changes like V600E
+                /\bc\.\d+[ATCG]>[ATCG]\b/i,  // HGVS DNA notation
+                /\bp\.[A-Z]\d+[A-Z]\b/i  // HGVS protein notation
+            ];
+            
+            for (const pattern of variantPatterns) {
+                const match = query.match(pattern);
+                if (match) return match[0];
+            }
+            return null;
+        }
+
+        function extractCondition(query) {
+            const conditionPatterns = [
+                /breast cancer/i,
+                /lung cancer/i,
+                /ovarian cancer/i,
+                /pancreatic cancer/i,
+                /prostate cancer/i,
+                /colorectal cancer/i,
+                /melanoma/i,
+                /lymphoma/i,
+                /leukemia/i
+            ];
+            
+            for (const pattern of conditionPatterns) {
+                const match = query.match(pattern);
+                if (match) return match[0].toLowerCase();
+            }
+            return null;
+        }
+
+        function extractDisease(query) {
+            return extractCondition(query);
+        }
+
+        function extractPhase(query) {
+            const phases = [];
+            if (/phase\s*1\b/i.test(query)) phases.push('PHASE1');
+            if (/phase\s*2\b/i.test(query)) phases.push('PHASE2');
+            if (/phase\s*3\b/i.test(query)) phases.push('PHASE3');
+            if (/phase\s*4\b/i.test(query)) phases.push('PHASE4');
+            return phases;
+        }
+
+        function extractSignificance(query) {
+            const significance = [];
+            if (/pathogenic/i.test(query) && !/likely.pathogenic/i.test(query)) significance.push('pathogenic');
+            if (/likely.pathogenic/i.test(query)) significance.push('likely_pathogenic');
+            if (/benign/i.test(query) && !/likely.benign/i.test(query)) significance.push('benign');
+            if (/likely.benign/i.test(query)) significance.push('likely_benign');
+            if (/uncertain/i.test(query)) significance.push('uncertain_significance');
+            return significance;
+        }
+
+        function extractIntervention(query) {
+            const interventionPatterns = [
+                /CDK4\/6\s+inhibitor/i,
+                /CDK4\/6/i,
+                /immunotherapy/i,
+                /chemotherapy/i,
+                /radiation/i,
+                /targeted\s+therapy/i,
+                /antibody.drug\s+conjugate/i,
+                /palbociclib/i,
+                /ribociclib/i,
+                /abemaciclib/i,
+                /trastuzumab/i,
+                /pembrolizumab/i
+            ];
+            
+            for (const pattern of interventionPatterns) {
+                const match = query.match(pattern);
+                if (match) return match[0];
+            }
+            return null;
+        }
+        function extractDrug(query) {
+            const drugPatterns = [
+                /trastuzumab/i,
+                /pertuzumab/i,
+                /palbociclib/i,
+                /ribociclib/i,
+                /abemaciclib/i,
+                /olaparib/i,
+                /pembrolizumab/i,
+                /nivolumab/i
+            ];
+            
+            for (const pattern of drugPatterns) {
+                const match = query.match(pattern);
+                if (match) return match[0].toLowerCase();
+            }
+            return null;
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+        function prepareToolParameters(toolName, query) {
+            // Extract relevant parameters from the query based on tool type
+            const params = {};
+            
+            switch(toolName) {
+                case 'search':
+                    params.query = query;
+                    params.limit = 10;
+                    break;
+                    
+                case 'article_searcher':
+                    // Try to extract gene and disease from query
+                    const geneMatch = query.match(/\b([A-Z][A-Z0-9]+)\b/);
+                    const diseaseMatch = query.match(/(?:cancer|disease|syndrome|disorder)/i);
+                    
+                    if (geneMatch) params.gene = geneMatch[1];
+                    if (diseaseMatch) params.disease = query;
+                    if (!geneMatch && !diseaseMatch) params.query = query;
+                    params.include_preprints = true;
+                    break;
+                    
+                case 'trial_searcher':
+                    params.condition = query;
+                    // Try to extract phase
+                    const phaseMatch = query.match(/phase\s*([1-4]|I{1,3}|IV)/i);
+                    if (phaseMatch) {
+                        params.phase = [`PHASE${phaseMatch[1].replace('I', '1').replace('II', '2').replace('III', '3').replace('IV', '4')}`];
+                    }
+                    break;
+                    
+                case 'variant_searcher':
+                    // Try to extract gene from query
+                    const varGeneMatch = query.match(/\b([A-Z][A-Z0-9]+)\b/);
+                    if (varGeneMatch) {
+                        params.gene = varGeneMatch[1];
+                    } else {
+                        params.variant = query;
+                    }
+                    break;
+                    
+                case 'gene_getter':
+                case 'gene_variants':
+                case 'gene_drugs':
+                case 'gene_pathways':
+                    const geneSymbolMatch = query.match(/\b([A-Z][A-Z0-9]+)\b/);
+                    params.gene_symbol = geneSymbolMatch ? geneSymbolMatch[1] : query;
+                    if (toolName === 'gene_getter') {
+                        params.include_variants = true;
+                        params.include_drugs = true;
+                    }
+                    break;
+                    
+                case 'disease_getter':
+                case 'disease_genes':
+                case 'disease_drugs':
+                    params.disease_name = query;
+                    if (toolName === 'disease_getter') {
+                        params.include_genes = true;
+                        params.include_drugs = true;
+                    }
+                    break;
+                    
+                case 'drug_getter':
+                case 'drug_targets':
+                case 'drug_trials':
+                    params.drug_name = query;
+                    if (toolName === 'drug_getter') {
+                        params.include_targets = true;
+                        params.include_trials = true;
+                    }
+                    break;
+                    
+                case 'variant_getter':
+                case 'variant_clinical':
+                case 'variant_population':
+                    params.variant_id = query;
+                    params.include_clinical = true;
+                    params.include_population = true;
+                    break;
+                    
+                case 'article_getter':
+                    params.identifier = query;
+                    params.full_text = true;
+                    break;
+                    
+                case 'trial_getter':
+                    // Try to extract NCT ID
+                    const nctMatch = query.match(/NCT\d{8}/);
+                    params.nct_id = nctMatch ? nctMatch[0] : query;
+                    break;
+                    
+                default:
+                    params.query = query;
+            }
+            
+            // Add default limit if not set
+            if (!params.limit) {
+                params.limit = 10;
+            }
+            
+            return params;
+        }
+
+        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+        // Replace the existing formatToolResult function with this enhanced version
+
+        function formatToolResult(toolName, data) {
+            let html = `<div class="tool-result">`;
+            html += `<div class="tool-name">🔧 ${toolName}</div>`;
+            
+            try {
+                // Handle different tool types with specific formatting
+                if (toolName === 'trial_searcher') {
+                    html += formatTrialSearchResults(data);
+                } else if (toolName === 'article_searcher') {
+                    html += formatArticleSearchResults(data);
+                } else if (toolName === 'variant_searcher') {
+                    html += formatVariantSearchResults(data);
+                } else if (toolName.startsWith('trial_')) {
+                    html += formatTrialDetails(data);
+                } else if (toolName.startsWith('article_')) {
+                    html += formatArticleDetails(data);
+                } else if (toolName.startsWith('variant_')) {
+                    html += formatVariantDetails(data);
+                } else if (toolName.startsWith('gene_')) {
+                    html += formatGeneResults(data);
+                } else if (toolName.startsWith('disease_')) {
+                    html += formatDiseaseResults(data);
+                } else if (toolName.startsWith('drug_')) {
+                    html += formatDrugResults(data);
+                } else {
+                    // Generic formatting for unknown tools
+                    html += formatGenericResults(data);
+                }
+            } catch (e) {
+                console.error('Error formatting results:', e);
+                html += `<div class="error">Error formatting results: ${e.message}</div>`;
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        function formatTrialSearchResults(data) {
+            if (!Array.isArray(data)) {
+                return `<div class="error">Unexpected trial data format</div>`;
+            }
+            
+            let html = `<div class="results-summary">📋 <strong>Found ${data.length} clinical trials</strong></div>`;
+            
+            data.slice(0, 5).forEach((trial, index) => {
+                html += `
+                    <div class="result-item trial-item">
+                        <div class="result-header">
+                            <strong>${index + 1}. ${trial['Study Title'] || trial.title || 'Unknown Title'}</strong>
+                            <span class="nct-id">${trial['NCT Number'] || trial.nct_id || ''}</span>
+                        </div>
+                        <div class="result-details">
+                            <div class="trial-status">
+                                <span class="status-badge status-${(trial['Study Status'] || '').toLowerCase().replace(/[^a-z]/g, '')}">${trial['Study Status'] || 'Unknown'}</span>
+                                ${trial['Phases'] ? `<span class="phase-badge">${trial['Phases']}</span>` : ''}
+                            </div>
+                            <div class="trial-info">
+                                <div><strong>Condition:</strong> ${trial['Conditions'] || 'Not specified'}</div>
+                                <div><strong>Intervention:</strong> ${trial['Interventions'] || 'Not specified'}</div>
+                                <div><strong>Enrollment:</strong> ${trial['Enrollment'] || 'Not specified'} participants</div>
+                                ${trial['Start Date'] ? `<div><strong>Start Date:</strong> ${trial['Start Date']}</div>` : ''}
+                            </div>
+                            ${trial['Brief Summary'] ? `<div class="trial-summary">${trial['Brief Summary']}</div>` : ''}
+                            ${trial['Study URL'] ? `<div class="trial-link"><a href="${trial['Study URL']}" target="_blank">📄 View Full Trial Details</a></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (data.length > 5) {
+                html += `<div class="more-results">... and ${data.length - 5} more trials</div>`;
+            }
+            
+            return html;
+        }
+
+        function formatArticleSearchResults(data) {
+            let html = '';
+            
+            // Handle cBioPortal summary if present
+            if (data.cbioportal_summary) {
+                html += `<div class="cbioportal-summary">${data.cbioportal_summary.replace(/\n/g, '<br>')}</div>`;
+            }
+            
+            // Handle articles array
+            const articles = data.articles || data;
+            if (!Array.isArray(articles)) {
+                return html + `<div class="error">No articles found or unexpected format</div>`;
+            }
+            
+            html += `<div class="results-summary">📚 <strong>Found ${articles.length} articles</strong></div>`;
+            
+            articles.slice(0, 5).forEach((article, index) => {
+                html += `
+                    <div class="result-item article-item">
+                        <div class="result-header">
+                            <strong>${index + 1}. ${article.title || 'Unknown Title'}</strong>
+                        </div>
+                        <div class="result-details">
+                            <div class="article-meta">
+                                <span class="journal">${article.journal || 'Unknown Journal'}</span>
+                                ${article.date ? `<span class="date">${article.date}</span>` : ''}
+                                ${article.pmid ? `<span class="pmid">PMID: ${article.pmid}</span>` : ''}
+                            </div>
+                            ${article.authors && article.authors.length > 0 ? `
+                                <div class="authors">
+                                    <strong>Authors:</strong> ${Array.isArray(article.authors) ? article.authors.slice(0, 3).join(', ') : article.authors}
+                                    ${Array.isArray(article.authors) && article.authors.length > 3 ? ` ... et al.` : ''}
+                                </div>
+                            ` : ''}
+                            ${article.abstract ? `<div class="abstract">${article.abstract.substring(0, 300)}${article.abstract.length > 300 ? '...' : ''}</div>` : ''}
+                            <div class="article-links">
+                                ${article.doi ? `<a href="https://doi.org/${article.doi}" target="_blank">📄 DOI</a>` : ''}
+                                ${article.pmid ? `<a href="https://pubmed.ncbi.nlm.nih.gov/${article.pmid}" target="_blank">📄 PubMed</a>` : ''}
+                                ${article.url ? `<a href="${article.url}" target="_blank">📄 Full Text</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (articles.length > 5) {
+                html += `<div class="more-results">... and ${articles.length - 5} more articles</div>`;
+            }
+            
+            return html;
+        }
+
+        function formatVariantSearchResults(data) {
+            if (!Array.isArray(data)) {
+                return `<div class="error">Unexpected variant data format</div>`;
+            }
+            
+            let html = `<div class="results-summary">🧬 <strong>Found ${data.length} variants</strong></div>`;
+            
+            data.slice(0, 5).forEach((variant, index) => {
+                html += `
+                    <div class="result-item variant-item">
+                        <div class="result-header">
+                            <strong>${index + 1}. ${variant.id || variant.name || 'Unknown Variant'}</strong>
+                            ${variant.gene ? `<span class="gene-name">Gene: ${variant.gene}</span>` : ''}
+                        </div>
+                        <div class="result-details">
+                            ${variant.significance ? `
+                                <div class="significance">
+                                    <span class="significance-badge significance-${variant.significance.toLowerCase().replace(/[^a-z]/g, '')}">${variant.significance}</span>
+                                </div>
+                            ` : ''}
+                            ${variant.consequence ? `<div><strong>Consequence:</strong> ${variant.consequence}</div>` : ''}
+                            ${variant.chromosome ? `<div><strong>Location:</strong> chr${variant.chromosome}:${variant.position || 'unknown'}</div>` : ''}
+                            ${variant.frequency ? `<div><strong>Population Frequency:</strong> ${variant.frequency}</div>` : ''}
+                            ${variant.description ? `<div class="variant-description">${variant.description}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (data.length > 5) {
+                html += `<div class="more-results">... and ${data.length - 5} more variants</div>`;
+            }
+            
+            return html;
+        }
+
+        function formatTrialDetails(data) {
+            return `<div class="trial-details">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatArticleDetails(data) {
+            return `<div class="article-details">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatVariantDetails(data) {
+            return `<div class="variant-details">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatGeneResults(data) {
+            if (typeof data === 'string') {
+                return `<div class="gene-results">${data.replace(/\n/g, '<br>')}</div>`;
+            }
+            return `<div class="gene-results">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatDiseaseResults(data) {
+            if (typeof data === 'string') {
+                return `<div class="disease-results">${data.replace(/\n/g, '<br>')}</div>`;
+            }
+            return `<div class="disease-results">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatDrugResults(data) {
+            if (typeof data === 'string') {
+                return `<div class="drug-results">${data.replace(/\n/g, '<br>')}</div>`;
+            }
+            return `<div class="drug-results">${JSON.stringify(data, null, 2)}</div>`;
+        }
+
+        function formatGenericResults(data) {
+            if (typeof data === 'string') {
+                return `<pre class="generic-results">${data}</pre>`;
+            } else if (Array.isArray(data)) {
+                let html = `<div class="results-summary"><strong>Found ${data.length} results</strong></div>`;
+                data.slice(0, 3).forEach((item, index) => {
+                    html += `<div class="result-item">${index + 1}. ${JSON.stringify(item).substring(0, 200)}...</div>`;
+                });
+                if (data.length > 3) {
+                    html += `<div class="more-results">... and ${data.length - 3} more results</div>`;
+                }
+                return html;
+            } else {
+                return `<pre class="generic-results">${JSON.stringify(data, null, 2)}</pre>`;
+            }
+        }
+        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+        function formatObjectData(obj) {
+            let html = '';
+            
+            // Special formatting for known data types
+            if (obj.articles) {
+                html += `<strong>Articles (${obj.articles.length}):</strong><br>`;
+                obj.articles.slice(0, 3).forEach(article => {
+                    html += `• ${article.title || 'Untitled'}<br>`;
+                    if (article.authors) html += `  Authors: ${article.authors}<br>`;
+                    if (article.journal) html += `  Journal: ${article.journal}<br>`;
+                });
+            } else if (obj.trials) {
+                html += `<strong>Clinical Trials (${obj.trials.length}):</strong><br>`;
+                obj.trials.slice(0, 3).forEach(trial => {
+                    html += `• ${trial.title || trial.nct_id}<br>`;
+                    if (trial.status) html += `  Status: ${trial.status}<br>`;
+                    if (trial.phase) html += `  Phase: ${trial.phase}<br>`;
+                });
+            } else if (obj.variants) {
+                html += `<strong>Variants (${obj.variants.length}):</strong><br>`;
+                obj.variants.slice(0, 3).forEach(variant => {
+                    html += `• ${variant.id || variant.name}<br>`;
+                    if (variant.significance) html += `  Significance: ${variant.significance}<br>`;
+                    if (variant.gene) html += `  Gene: ${variant.gene}<br>`;
+                });
+            } else {
+                // Generic object formatting
+                const keys = Object.keys(obj).slice(0, 10);
+                keys.forEach(key => {
+                    const value = obj[key];
+                    if (value !== null && value !== undefined) {
+                        html += `<strong>${key}:</strong> `;
+                        if (typeof value === 'object') {
+                            html += JSON.stringify(value).substring(0, 100) + '...<br>';
+                        } else {
+                            html += `${value}<br>`;
+                        }
+                    }
+                });
+            }
+            
+            return html;
+        }
+
+        // Add this after the other function definitions
+
+        function debugLog(message, data = null) {
+            console.log(`[BioMCP Debug] ${message}`, data || '');
+            
+            // Also show in UI for debugging
+            if (window.location.search.includes('debug=true')) {
+                const debugDiv = document.createElement('div');
+                debugDiv.style.cssText = 'background: #f0f0f0; border: 1px solid #ccc; padding: 5px; margin: 5px 0; font-size: 12px; font-family: monospace;';
+                debugDiv.textContent = `DEBUG: ${message} ${data ? JSON.stringify(data) : ''}`;
+                document.getElementById('messages').appendChild(debugDiv);
+            }
+        }        
+
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initializeInterface);
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "build": {
+    "buildCommand": "pip install -r requirements.txt"
+  },
+  "deploy": {
+    "startCommand": "uvicorn production_biomcp_api-V16:app --host 0.0.0.0 --port $PORT"
+  }
+}
