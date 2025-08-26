@@ -748,6 +748,12 @@ async def get_auth_token(credentials: HTTPAuthorizationCredentials = Depends(sec
 # =============================================================================
 # CORE API ENDPOINTS
 # =============================================================================
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+@app.get("/")
+async def serve_frontend():
+    return FileResponse("bioMCPChat-V3.html")
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
